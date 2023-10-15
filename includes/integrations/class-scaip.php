@@ -51,8 +51,8 @@ final class SCAIP {
 
 		// Deprecate sidebar.
 		if ( ! self::is_legacy_widgets() ) {
-			remove_action( 'scaip_shortcode', 'scaip_shortcode_do_sidebar' );
-			add_filter( 'scaip_disable_sidebars', '__return_true' );
+			// remove_action( 'scaip_shortcode', 'scaip_shortcode_do_sidebar' );
+			// add_filter( 'scaip_disable_sidebars', '__return_true' );
 			add_filter( 'newspack_ads_placement_data', [ __CLASS__, 'get_ad_unit_from_widget' ], 10, 3 );
 		}
 	}
