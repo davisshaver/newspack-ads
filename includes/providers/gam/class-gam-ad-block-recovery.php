@@ -81,6 +81,10 @@ final class GAM_Ad_Block_Recovery {
 		if ( ! $settings['active'] || empty( $settings['pub'] ) || empty( $settings['nonce'] ) ) {
 			return;
 		}
+		$disable_ad_block_recovery = \apply_filters( 'newspack_ads_disable_ad_block_recovery', false );
+		if ( $disable_ad_block_recovery ) {
+			return;
+		}
 		$recovery_script = 'https://fundingchoicesmessages.google.com/i/pub-' . \esc_attr( $settings['pub'] ) . '?ers=1';
 		$recovery_script = \apply_filters( 'newspack_ads_gam_ad_block_recovery_script', $recovery_script );
 		?>
