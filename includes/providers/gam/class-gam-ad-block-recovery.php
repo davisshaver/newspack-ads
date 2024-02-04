@@ -81,8 +81,10 @@ final class GAM_Ad_Block_Recovery {
 		if ( ! $settings['active'] || empty( $settings['pub'] ) || empty( $settings['nonce'] ) ) {
 			return;
 		}
+		$recovery_script = 'https://fundingchoicesmessages.google.com/i/pub-' . \esc_attr( $settings['pub'] ) . '?ers=1';
+		$recovery_script = \apply_filters( 'newspack_ads_gam_ad_block_recovery_script', $recovery_script );
 		?>
-		<script data-amp-plus-allowed async src="https://fundingchoicesmessages.google.com/i/pub-<?php echo \esc_attr( $settings['pub'] ); ?>?ers=1" nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>"></script>
+		<script data-amp-plus-allowed async src="<?php echo $recovery_script; ?>" nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>"></script>
 		<script data-amp-plus-allowed nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
 			( function() {
 				function signalGooglefcPresent() {
