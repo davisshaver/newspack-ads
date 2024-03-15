@@ -88,7 +88,25 @@ final class GAM_Ad_Block_Recovery {
 		$recovery_script = 'https://fundingchoicesmessages.google.com/i/pub-' . \esc_attr( $settings['pub'] ) . '?ers=1';
 		$recovery_script = \apply_filters( 'newspack_ads_gam_ad_block_recovery_script', $recovery_script );
 		?>
-		<script data-amp-plus-allowed async src="<?php echo $recovery_script; ?>" nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>"></script>
+		<script id="gam-ad-block-recovery-preloader">
+			function isLebtownMemberCookieSet() {
+				const cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)lebtown_member\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+				return Boolean(cookieValue);
+			}
+			function hasRefMemberParam() {
+				const queryParams = new URLSearchParams(window.location.search);
+				return queryParams.has('ref') && queryParams.get('ref') === 'member';
+			}
+			if (!isLebtownMemberCookieSet() && !hasRefMemberParam()) {
+				const adBlockRecoveryScript = document.createElement('script');
+				adBlockRecoveryScript.setAttribute('async', '');
+				adBlockRecoveryScript.setAttribute('src', '<?php echo \esc_url( $recovery_script ); ?>');
+				adBlockRecoveryScript.setAttribute('nonce', '<?php echo \esc_attr( $settings['nonce'] ); ?>');
+				adBlockRecoveryScript.setAttribute('data-amp-plus-allowed', '');
+				const adBlockRecoveryPreloader = document.getElementById('gam-ad-block-recovery-preloader');
+				adBlockRecoveryPreloader.parentNode.insertBefore(adBlockRecoveryScript, adBlockRecoveryPreloader.nextSibling);
+			}
+		</script>
 		<script data-amp-plus-allowed nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
 			( function() {
 				function signalGooglefcPresent() {
