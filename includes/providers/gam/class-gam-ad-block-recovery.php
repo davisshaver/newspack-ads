@@ -89,16 +89,7 @@ final class GAM_Ad_Block_Recovery {
 		$recovery_script = \apply_filters( 'newspack_ads_gam_ad_block_recovery_script', $recovery_script );
 		?>
 		<script id="gam-ad-block-recovery-preloader">
-			function isLebtownMemberCookieSet() {
-				const cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)lebtown_member\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-				return Boolean(cookieValue);
-			}
-			function hasRefMemberParam() {
-				const queryParams = new URLSearchParams(window.location.search);
-				return queryParams.has('ref') && queryParams.get('ref') === 'member';
-			}
-			const isCookieSet = isLebtownMemberCookieSet();
-			if (!isCookieSet && !hasRefMemberParam()) {
+			if (!window.skipAdBlockRecovery) {
 				const adBlockRecoveryScript = document.createElement('script');
 				adBlockRecoveryScript.setAttribute('async', '');
 				adBlockRecoveryScript.setAttribute('src', '<?php echo \esc_url( $recovery_script ); ?>');
@@ -106,25 +97,6 @@ final class GAM_Ad_Block_Recovery {
 				adBlockRecoveryScript.setAttribute('data-amp-plus-allowed', '');
 				const adBlockRecoveryPreloader = document.getElementById('gam-ad-block-recovery-preloader');
 				adBlockRecoveryPreloader.parentNode.insertBefore(adBlockRecoveryScript, adBlockRecoveryPreloader.nextSibling);
-			} else {
-				if (!isCookieSet) {
-					const date = new Date();
-					date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
-					document.cookie = 'lebtown_member=true; path=/; expires=' + date.toUTCString();
-				}
-				if (window.broadstreetKeywords) {
-					window.broadstreetKeywords.push('member');
-				}
-				const broadstreetZones = document.querySelectorAll('broadstreet-zone');
-				broadstreetZones.forEach(zone => {
-					let keywords = zone.getAttribute('keywords');
-					if (keywords) {
-						keywords += ",member";
-					} else {
-						keywords = "member";
-					}
-					zone.setAttribute('keywords', keywords);
-				});
 			}
 		</script>
 		<script data-amp-plus-allowed nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
