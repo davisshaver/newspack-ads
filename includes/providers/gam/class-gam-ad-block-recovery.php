@@ -97,7 +97,8 @@ final class GAM_Ad_Block_Recovery {
 				const queryParams = new URLSearchParams(window.location.search);
 				return queryParams.has('ref') && queryParams.get('ref') === 'member';
 			}
-			if (!isLebtownMemberCookieSet() && !hasRefMemberParam()) {
+			const isCookieSet = isLebtownMemberCookieSet();
+			if (!isCookieSet && !hasRefMemberParam()) {
 				const adBlockRecoveryScript = document.createElement('script');
 				adBlockRecoveryScript.setAttribute('async', '');
 				adBlockRecoveryScript.setAttribute('src', '<?php echo \esc_url( $recovery_script ); ?>');
@@ -105,6 +106,15 @@ final class GAM_Ad_Block_Recovery {
 				adBlockRecoveryScript.setAttribute('data-amp-plus-allowed', '');
 				const adBlockRecoveryPreloader = document.getElementById('gam-ad-block-recovery-preloader');
 				adBlockRecoveryPreloader.parentNode.insertBefore(adBlockRecoveryScript, adBlockRecoveryPreloader.nextSibling);
+			} else {
+				if (!isCookieSet) {
+					const date = new Date();
+					date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
+					document.cookie = 'lebtown_member=true; path=/; expires=' + date.toUTCString();
+				}
+				if (window.broadstreetKeywords) {
+					window.broadstreetKeywords.push('member');
+				}
 			}
 		</script>
 		<script data-amp-plus-allowed nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
