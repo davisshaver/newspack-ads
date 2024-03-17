@@ -496,7 +496,7 @@ final class GAM_Scripts {
 			return;
 		}
 		$ad_unit      = $ad_units[ $ad_unit_idx ];
-		$container_id = esc_attr( sprintf( '.newspack_global_ad.%s', $placement_key ) );
+		$container_id = esc_attr( sprintf( '.newspack_global_dad.%s', $placement_key ) );
 		$size_map     = GAM_Model::get_ad_unit_size_map( $ad_unit );
 		echo '<style>';
 		foreach ( $size_map as $viewport_width => $sizes ) {

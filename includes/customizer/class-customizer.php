@@ -137,7 +137,7 @@ final class Customizer {
 			$wp_customize->selective_refresh->add_partial(
 				$setting_id,
 				[
-					'selector'            => sprintf( '.newspack_global_ad.%s', $placement_key ),
+					'selector'            => sprintf( '.newspack_global_dad.%s', $placement_key ),
 					'container_inclusive' => false,
 					'fallback_refresh'    => true,
 					'render_callback'     => function() use ( $placement_key ) {

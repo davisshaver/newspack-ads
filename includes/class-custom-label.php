@@ -72,7 +72,7 @@ final class Custom_Label {
 		$selectors = apply_filters(
 			'newspack_ads_custom_label_container_selectors',
 			[
-				'.newspack_global_ad',
+				'.newspack_global_dad',
 				'.widget.widget_newspack-ads-widget .textwidget',
 			]
 		);

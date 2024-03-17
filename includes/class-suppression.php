@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Suppression {
 
-	const OPTION_NAME = '_newspack_global_ad_suppression';
+	const OPTION_NAME = '_newspack_global_dad_suppression';
 
 	/**
 	 * Initialize hooks.
