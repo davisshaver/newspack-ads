@@ -115,6 +115,16 @@ final class GAM_Ad_Block_Recovery {
 				if (window.broadstreetKeywords) {
 					window.broadstreetKeywords.push('member');
 				}
+				const broadstreetZones = document.querySelectorAll('broadstreet-zone');
+				broadstreetZones.forEach(zone => {
+					let keywords = zone.getAttribute('keywords');
+					if (keywords) {
+						keywords += ",member";
+					} else {
+						keywords = "member";
+					}
+					zone.setAttribute('keywords', keywords);
+				});
 			}
 		</script>
 		<script data-amp-plus-allowed nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
