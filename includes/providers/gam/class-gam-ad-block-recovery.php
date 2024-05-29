@@ -32,9 +32,6 @@ final class GAM_Ad_Block_Recovery {
 	 * @return array Updated list of settings.
 	 */
 	public static function register_settings( $settings_list ) {
-		if ( Core::is_amp() ) {
-			return $settings_list;
-		}
 		return array_merge(
 			[
 				[
@@ -71,9 +68,6 @@ final class GAM_Ad_Block_Recovery {
 	 * Render Ad Block Recovery script.
 	 */
 	public static function render_script() {
-		if ( Core::is_amp() ) {
-			return;
-		}
 		$settings = Settings::get_settings( self::SECTION, true );
 		if ( empty( $settings ) ) {
 			return;
@@ -99,7 +93,7 @@ final class GAM_Ad_Block_Recovery {
 				adBlockRecoveryPreloader.parentNode.insertBefore(adBlockRecoveryScript, adBlockRecoveryPreloader.nextSibling);
 			}
 		</script>
-		<script data-amp-plus-allowed nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
+		<script nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
 			( function() {
 				function signalGooglefcPresent() {
 					if ( !window.frames['googlefcPresent'] ) {
