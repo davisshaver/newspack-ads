@@ -1,3 +1,24 @@
+# [3.2.0](https://github.com/Automattic/newspack-ads/compare/v3.1.0...v3.2.0) (2024-10-09)
+
+
+### Features
+
+* **media-kit:** expose method; add get_page_status method ([#908](https://github.com/Automattic/newspack-ads/issues/908)) ([36f3af5](https://github.com/Automattic/newspack-ads/commit/36f3af539d7b962a940ef81e792024014e71dbb1))
+
+# [3.1.0](https://github.com/Automattic/newspack-ads/compare/v3.0.2...v3.1.0) (2024-10-08)
+
+
+### Features
+
+* **media-kit:** add media kit (from publisher-media-kit plugin) ([#894](https://github.com/Automattic/newspack-ads/issues/894)) ([8c46acf](https://github.com/Automattic/newspack-ads/commit/8c46acf94d6dae77585df44d48374d9bc93a78e1))
+
+## [3.0.2](https://github.com/Automattic/newspack-ads/compare/v3.0.1...v3.0.2) (2024-08-19)
+
+
+### Bug Fixes
+
+* add 1x1 size to all viewports for ad units that supports it ([#891](https://github.com/Automattic/newspack-ads/issues/891)) ([0b26934](https://github.com/Automattic/newspack-ads/commit/0b2693481ca54e1e7ecf19aeac0c4e85f639062a))
+
 ## [3.0.1](https://github.com/Automattic/newspack-ads/compare/v3.0.0...v3.0.1) (2024-08-15)
 
 
