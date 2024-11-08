@@ -41,7 +41,7 @@ final class GAM_Scripts {
 			return;
 		}
 		?>
-		<script defer src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+		<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
 		<script>
 			window.googletag = window.googletag || { cmd: [] };
 		</script>
