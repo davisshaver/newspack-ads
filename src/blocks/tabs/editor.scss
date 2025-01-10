@@ -61,13 +61,8 @@
 				padding-top: 10px;
 			}
 
-			&:not(
-			:has(
-				.wp-block-paragraph[data-empty="true"]
-				+ .block-list-appender
-			)
-		) {
-			.block-list-appender {
+			&:not(:has(.wp-block-paragraph[data-empty="true"] + .block-list-appender)) {
+				.block-list-appender {
 					display: flex;
 					flex-direction: row-reverse;
 					margin: 0;
@@ -75,7 +70,6 @@
 				}
 			}
 		}
-
 
 		& .wp-block-paragraph.is-selected + .block-list-appender {
 			display: none;
