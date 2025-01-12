@@ -25,7 +25,7 @@ final class GAM_Scripts {
 	 * @return void
 	 */
 	public static function init() {
-		add_action( 'wp_head', [ __CLASS__, 'insert_gpt_header_script' ], 1 );
+		add_action( 'wp_head', [ __CLASS__, 'insert_gpt_header_script' ], 11 );
 		add_action( 'wp_footer', [ __CLASS__, 'insert_gpt_footer_script' ] );
 		add_action( 'newspack_ads_before_placement_ad', [ __CLASS__, 'print_fixed_height_css' ], 10, 3 );
 	}
