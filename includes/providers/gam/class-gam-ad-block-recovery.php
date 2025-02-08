@@ -108,7 +108,9 @@ final class GAM_Ad_Block_Recovery {
 						}
 					}
 				}
-				signalGooglefcPresent();
+				if (!window.skipAdBlockRecovery) {
+					signalGooglefcPresent();
+				}
 			} )();
 		</script>
 		<?php
