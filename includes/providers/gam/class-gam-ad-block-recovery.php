@@ -51,14 +51,6 @@ final class GAM_Ad_Block_Recovery {
 					'type'        => 'string',
 					'public'      => true,
 				],
-				[
-					'description' => __( 'Nonce', 'newspack-ads' ),
-					'help'        => __( '"Nonce" value provided by GAM. E.g.: Ab3De6GhiJklMnoPqRstUV', 'newspack-ads' ),
-					'section'     => self::SECTION,
-					'key'         => 'nonce',
-					'type'        => 'string',
-					'public'      => true,
-				],
 			],
 			$settings_list
 		);
@@ -72,7 +64,7 @@ final class GAM_Ad_Block_Recovery {
 		if ( empty( $settings ) ) {
 			return;
 		}
-		if ( ! $settings['active'] || empty( $settings['pub'] ) || empty( $settings['nonce'] ) ) {
+		if ( ! $settings['active'] || empty( $settings['pub'] ) ) {
 			return;
 		}
 		$disable_ad_block_recovery = \apply_filters( 'newspack_ads_disable_ad_block_recovery', false );
@@ -87,8 +79,6 @@ final class GAM_Ad_Block_Recovery {
 				const adBlockRecoveryScript = document.createElement('script');
 				adBlockRecoveryScript.setAttribute('async', '');
 				adBlockRecoveryScript.setAttribute('src', '<?php echo \esc_url( $recovery_script ); ?>');
-				adBlockRecoveryScript.setAttribute('nonce', '<?php echo \esc_attr( $settings['nonce'] ); ?>');
-				adBlockRecoveryScript.setAttribute('data-amp-plus-allowed', '');
 				const adBlockRecoveryPreloader = document.getElementById('gam-ad-block-recovery-preloader');
 				adBlockRecoveryPreloader.parentNode.insertBefore(adBlockRecoveryScript, adBlockRecoveryPreloader.nextSibling);
 			}
