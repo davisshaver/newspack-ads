@@ -83,7 +83,7 @@ final class GAM_Ad_Block_Recovery {
 				adBlockRecoveryPreloader.parentNode.insertBefore(adBlockRecoveryScript, adBlockRecoveryPreloader.nextSibling);
 			}
 		</script>
-		<script nonce="<?php echo \esc_attr( $settings['nonce'] ); ?>">
+		<script>
 			( function() {
 				function signalGooglefcPresent() {
 					if ( !window.frames['googlefcPresent'] ) {
