@@ -18,129 +18,126 @@ final class Media_Kit_Block_Patterns {
 	 */
 	public static function init() {
 		add_action( 'init', [ __CLASS__, 'register_block_patterns_and_categories' ] );
+		add_action( 'upgrader_process_complete', [ __CLASS__, 'clear_pattern_cache' ] );
+	}
+
+	/**
+	 * Clear the cached pattern content.
+	 */
+	public static function clear_pattern_cache() {
+		delete_transient( 'newspack_ads_media_kit_patterns' );
 	}
 
 	/**
 	 * Register block patterns.
 	 */
 	public static function register_block_patterns_and_categories() {
-			// Register block pattern category for Publisher Media Kit.
-			register_block_pattern_category(
-				'newspack-ads',
-				array( 'label' => __( 'Newspack Media Kit', 'newspack-ads' ) )
-			);
+		// Register block pattern category for Publisher Media Kit.
+		register_block_pattern_category(
+			'newspack-ads',
+			array( 'label' => __( 'Newspack Media Kit', 'newspack-ads' ) )
+		);
 
-			// Register block pattern for the intro.
-			ob_start();
-			include_once NEWSPACK_ADS_MEDIA_KIT_BLOCK_PATTERNS . 'intro.php';
-			$intro = ob_get_clean();
-			register_block_pattern(
-				'newspack-ads/intro',
-				array(
-					'title'       => __( 'Media Kit - Intro', 'newspack-ads' ),
-					'description' => __( 'The intro section for the Media Kit page.', 'newspack-ads' ),
-					'categories'  => [ 'newspack-ads' ],
-					'content'     => wp_kses_post( $intro ),
-				)
-			);
+		$pattern_content = self::get_cached_pattern_content();
+		
+		$patterns = [
+			'intro' => [
+				'title'       => __( 'Media Kit - Intro', 'newspack-ads' ),
+				'description' => __( 'The intro section for the Media Kit page.', 'newspack-ads' ),
+			],
+			'audience' => [
+				'title'       => __( 'Media Kit - Audience', 'newspack-ads' ),
+				'description' => __( 'A 3-column layout showing the audience.', 'newspack-ads' ),
+			],
+			'why-us' => [
+				'title'       => __( 'Media Kit - Why Us?', 'newspack-ads' ),
+				'description' => __( 'A 2-column layout for the "Why Us?" section.', 'newspack-ads' ),
+			],
+			'ad-specs' => [
+				'title'       => __( 'Media Kit - Ad Specs', 'newspack-ads' ),
+				'description' => __( 'Ad Specs tabular structure with tabs management.', 'newspack-ads' ),
+			],
+			'rates' => [
+				'title'       => __( 'Media Kit - Rates', 'newspack-ads' ),
+				'description' => __( 'Rates tabular structure with tabs management.', 'newspack-ads' ),
+			],
+			'packages' => [
+				'title'       => __( 'Media Kit - Packages', 'newspack-ads' ),
+				'description' => __( 'Packages layout with a short note and a 3-column layout.', 'newspack-ads' ),
+			],
+			'contact-compact' => [
+				'title'       => __( 'Media Kit - Contact (Compact)', 'newspack-ads' ),
+				'description' => __( 'A compact Call-To-Action to get in touch.', 'newspack-ads' ),
+			],
+			'contact' => [
+				'title'       => __( 'Media Kit - Contact', 'newspack-ads' ),
+				'description' => __( 'A Call-To-Action to get in touch.', 'newspack-ads' ),
+			],
+		];
 
-			// Register block pattern for the audience.
-			ob_start();
-			include_once NEWSPACK_ADS_MEDIA_KIT_BLOCK_PATTERNS . 'audience.php';
-			$audience = ob_get_clean();
-			register_block_pattern(
-				'newspack-ads/audience',
-				array(
-					'title'       => __( 'Media Kit - Audience', 'newspack-ads' ),
-					'description' => __( 'A 3-column layout showing the audience.', 'newspack-ads' ),
-					'categories'  => [ 'newspack-ads' ],
-					'content'     => wp_kses_post( $audience ),
-				)
-			);
+		foreach ( $patterns as $slug => $config ) {
+			if ( isset( $pattern_content[ $slug ] ) ) {
+				register_block_pattern(
+					'newspack-ads/' . $slug,
+					array(
+						'title'       => $config['title'],
+						'description' => $config['description'],
+						'categories'  => [ 'newspack-ads' ],
+						'content'     => $pattern_content[ $slug ],
+					)
+				);
+			}
+		}
+	}
 
-			// Register block pattern for why us.
-			ob_start();
-			include_once NEWSPACK_ADS_MEDIA_KIT_BLOCK_PATTERNS . 'why-us.php';
-			$why_us = ob_get_clean();
-			register_block_pattern(
-				'newspack-ads/why-us',
-				array(
-					'title'       => __( 'Media Kit - Why Us?', 'newspack-ads' ),
-					'description' => __( 'A 2-column layout for the "Why Us?" section.', 'newspack-ads' ),
-					'categories'  => [ 'newspack-ads' ],
-					'content'     => wp_kses_post( $why_us ),
-				)
-			);
+	/**
+	 * Get cached block pattern content to avoid repeated file I/O and processing.
+	 *
+	 * @return array Array of pattern content keyed by slug.
+	 */
+	private static function get_cached_pattern_content() {
+		// Use WordPress transients for caching with a 1-hour expiration.
+		$cache_key = 'newspack_ads_media_kit_patterns';
+		$cached_content = get_transient( $cache_key );
+		
+		if ( false !== $cached_content ) {
+			return $cached_content;
+		}
 
-			// Register block pattern for tabs with table structure for the ad specs.
-			ob_start();
-			include_once NEWSPACK_ADS_MEDIA_KIT_BLOCK_PATTERNS . 'ad-specs.php';
-			$ad_specs = ob_get_clean();
-			register_block_pattern(
-				'newspack-ads/ad-specs',
-				array(
-					'title'       => __( 'Media Kit - Ad Specs', 'newspack-ads' ),
-					'description' => __( 'Ad Specs tabular structure with tabs management.', 'newspack-ads' ),
-					'categories'  => [ 'newspack-ads' ],
-					'content'     => wp_kses_post( $ad_specs ),
-				)
-			);
+		// Load all pattern files in a single operation.
+		$pattern_files = [
+			'intro' => 'intro.php',
+			'audience' => 'audience.php',
+			'why-us' => 'why-us.php',
+			'ad-specs' => 'ad-specs.php',
+			'rates' => 'rates.php',
+			'packages' => 'packages.php',
+			'contact-compact' => 'contact-compact.php',
+			'contact' => 'contact.php',
+		];
 
-			// Register block pattern for tabs with table structure for the rates.
-			ob_start();
-			include_once NEWSPACK_ADS_MEDIA_KIT_BLOCK_PATTERNS . 'rates.php';
-			$rates = ob_get_clean();
-			register_block_pattern(
-				'newspack-ads/rates',
-				array(
-					'title'       => __( 'Media Kit - Rates', 'newspack-ads' ),
-					'description' => __( 'Rates tabular structure with tabs management.', 'newspack-ads' ),
-					'categories'  => [ 'newspack-ads' ],
-					'content'     => wp_kses_post( $rates ),
-				)
-			);
+		$pattern_content = [];
+		
+		// Single ob_start/ob_get_clean cycle for all patterns.
+		ob_start();
+		
+		foreach ( $pattern_files as $slug => $filename ) {
+			$file_path = NEWSPACK_ADS_MEDIA_KIT_BLOCK_PATTERNS . $filename;
+			if ( file_exists( $file_path ) ) {
+				// Capture output for this specific pattern.
+				ob_start();
+				include $file_path;
+				$pattern_content[ $slug ] = wp_kses_post( ob_get_clean() );
+			}
+		}
+		
+		// Clean up the outer buffer.
+		ob_end_clean();
 
-			// Register block pattern for the packages section.
-			ob_start();
-			include_once NEWSPACK_ADS_MEDIA_KIT_BLOCK_PATTERNS . 'packages.php';
-			$packages = ob_get_clean();
-			register_block_pattern(
-				'newspack-ads/packages',
-				array(
-					'title'       => __( 'Media Kit - Packages', 'newspack-ads' ),
-					'description' => __( 'Packages layout with a short note and a 3-column layout.', 'newspack-ads' ),
-					'categories'  => [ 'newspack-ads' ],
-					'content'     => wp_kses_post( $packages ),
-				)
-			);
-
-			// Register block pattern for the contact (compact) section.
-			ob_start();
-			include_once NEWSPACK_ADS_MEDIA_KIT_BLOCK_PATTERNS . 'contact-compact.php';
-			$contact_compact = ob_get_clean();
-			register_block_pattern(
-				'newspack-ads/contact-compact',
-				array(
-					'title'       => __( 'Media Kit - Contact (Compact)', 'newspack-ads' ),
-					'description' => __( 'A compact Call-To-Action to get in touch.', 'newspack-ads' ),
-					'categories'  => [ 'newspack-ads' ],
-					'content'     => wp_kses_post( $contact_compact ),
-				)
-			);
-
-			// Register block pattern for the contact section.
-			ob_start();
-			include_once NEWSPACK_ADS_MEDIA_KIT_BLOCK_PATTERNS . 'contact.php';
-			$contact = ob_get_clean();
-			register_block_pattern(
-				'newspack-ads/contact',
-				array(
-					'title'       => __( 'Media Kit - Contact', 'newspack-ads' ),
-					'description' => __( 'A Call-To-Action to get in touch.', 'newspack-ads' ),
-					'categories'  => [ 'newspack-ads' ],
-					'content'     => wp_kses_post( $contact ),
-				)
-			);
+		// Cache the processed content for 1 hour.
+		set_transient( $cache_key, $pattern_content, HOUR_IN_SECONDS );
+		
+		return $pattern_content;
 	}
 }
 
